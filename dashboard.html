@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen Dashboard - Smart City Issue Reporting</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Leaflet Map Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <h2>Smart City</h2>
+            </div>
+            <div class="navbar-status" id="backgroundStatus" style="display: none;">
+                🔄 <span id="statusText"></span>
+            </div>
+            <div class="navbar-actions">
+                <button id="darkModeToggle" class="btn-theme">🌙 Dark Mode</button>
+                <button id="logoutBtn" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <h1>Welcome, <span id="userEmail">User</span>!</h1>
+            <p>Report and track city issues in your area</p>
+        </section>
+
+        <div class="dashboard-grid">
+            <!-- Create Issue Form -->
+            <section class="form-section card">
+                <h2>Report a New Issue</h2>
+                <form id="issueForm" class="issue-form">
+                    <div class="form-group">
+                        <label for="issueTitle">Issue Title *</label>
+                        <input type="text" id="issueTitle" placeholder="Brief title of the issue" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issueDescription">Description *</label>
+                        <textarea id="issueDescription" placeholder="Provide detailed description of the issue" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="issueCategory">Category *</label>
+                            <div class="category-container">
+                                <select id="issueCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="Infrastructure">Infrastructure</option>
+                                    <option value="Electricity">Electricity</option>
+                                    <option value="Water Supply">Water Supply</option>
+                                    <option value="Garbage">Garbage</option>
+                                    <option value="Traffic">Traffic</option>
+                                    <option value="custom">➕ Add Custom Category</option>
+                                </select>
+                            </div>
+                            <input type="text" id="customCategory" placeholder="Enter custom category name" class="custom-input hidden">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="issueLocation">Location *</label>
+                            <div class="location-input-container">
+                                <input type="text" id="issueLocation" placeholder="Click on map or enter location" readonly>
+                                <button type="button" id="openMapBtn" class="btn-map">📍 Open Map</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issuePhoto">📸 Attach Photos (Optional)</label>
+                        <div class="photo-upload-container">
+                            <input type="file" id="issuePhoto" accept="image/*" multiple class="photo-input">
+                            <label for="issuePhoto" class="photo-upload-label">
+                                <span class="upload-icon">📷</span>
+                                <span class="upload-text">Click to select photos or drag & drop</span>
+                            </label>
+                        </div>
+                        <div id="photoPreview" class="photo-preview"></div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Submit Issue</button>
+                </form>
+            </section>
+
+            <!-- My Issues Section -->
+            <section class="issues-section">
+                <h2>My Issues</h2>
+                <div id="myIssuesList" class="issues-list">
+                    <p class="empty-state">No issues reported yet. Create one above!</p>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Success Alert -->
+    <div id="successAlert" class="alert alert-success">
+        <span id="alertMessage"></span>
+        <button class="alert-close">&times;</button>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <h3>Confirm Delete</h3>
+            <p>Are you sure you want to delete this issue? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button id="confirmDelete" class="btn-danger">Delete</button>
+                <button id="cancelDelete" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Map Modal -->
+    <div id="mapModal" class="modal">
+        <div class="modal-content map-modal-content">
+            <div class="map-modal-header">
+                <h3>Select Location on Map</h3>
+                <button id="closeMapBtn" class="close-btn">&times;</button>
+            </div>
+            <div id="issueMap" class="issue-map"></div>
+            <div class="map-info">
+                <p id="mapCoordinates">Click on the map to select a location</p>
+            </div>
+            <div class="modal-actions">
+                <button id="confirmLocation" class="btn-primary">Confirm Location</button>
+                <button id="cancelLocation" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Issue Detail Modal -->
+    <div id="issueDetailModal" class="modal">
+        <div class="modal-content issue-detail-modal">
+            <div class="issue-detail-header">
+                <h2 id="detailIssueTitle"></h2>
+                <button class="close-btn" onclick="closeIssueDetail()">&times;</button>
+            </div>
+            <div class="issue-detail-body">
+                <div class="detail-section">
+                    <h4>Description</h4>
+                    <p id="detailIssueDescription"></p>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-field">
+                        <strong>Category:</strong>
+                        <p id="detailIssueCategory"></p>
+                    </div>
+                    <div class="detail-field">
+                        <strong>Location:</strong>
+                        <p id="detailIssueLocation"></p>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-field">
+                        <strong>Status:</strong>
+                        <p id="detailIssueStatus"></p>
+                    </div>
+                    <div class="detail-field">
+                        <strong>Created By:</strong>
+                        <p id="detailIssueCreator"></p>
+                    </div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-field">
+                        <strong>Created Date:</strong>
+                        <p id="detailIssueDate"></p>
+                    </div>
+                </div>
+
+                <div id="detailPhotosSection" class="detail-section" style="display: none;">
+                    <h4>Photos</h4>
+                    <div id="detailPhotoGrid" class="detail-photo-grid"></div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeIssueDetail()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

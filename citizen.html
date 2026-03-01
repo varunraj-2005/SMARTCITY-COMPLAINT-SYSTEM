@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart City - Citizen Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+
+<body>
+    <!-- Citizen Portal Container -->
+    <div class="dashboard-container citizen-portal">
+        
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <h1>👤 Citizen Portal</h1>
+                <p>Report and track city issues</p>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span id="citizenName">Citizen</span>
+                    <button onclick="logout()" class="logout-btn">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('report')">📝 Report Issue</button>
+            <button class="tab-btn" onclick="switchTab('myIssues')">📋 My Issues</button>
+            <button class="tab-btn" onclick="switchTab('status')">✅ Status Tracker</button>
+        </div>
+
+        <!-- Report Issue Tab -->
+        <div id="reportTab" class="tab-content active">
+            <div class="report-form-container">
+                <h2>Report a City Issue</h2>
+                
+                <form id="issueForm" class="issue-form">
+                    <div class="form-group">
+                        <label for="issueTitle">Issue Title *</label>
+                        <input type="text" id="issueTitle" placeholder="e.g., Broken Pothole on Main Street" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issueCategory">Category *</label>
+                        <select id="issueCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="pothole">Pothole/Road Damage</option>
+                            <option value="streetlight">Streetlight</option>
+                            <option value="water">Water Issue</option>
+                            <option value="garbage">Garbage/Waste</option>
+                            <option value="pollution">Pollution</option>
+                            <option value="accident">Accident</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issueLocation">Location *</label>
+                        <input type="text" id="issueLocation" placeholder="Enter the exact location" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issueDescription">Description *</label>
+                        <textarea id="issueDescription" placeholder="Describe the issue in detail..." rows="5" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issuePriority">Priority Level</label>
+                        <select id="issuePriority">
+                            <option value="normal">Normal</option>
+                            <option value="high">High</option>
+                            <option value="critical">Critical</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="issueAttachment">Attach Image (Optional)</label>
+                        <input type="file" id="issueAttachment" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large">📤 Submit Issue</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- My Issues Tab -->
+        <div id="myIssuesTab" class="tab-content">
+            <div class="my-issues-filter">
+                <input type="text" id="mySearchIssue" placeholder="Search your issues..." onkeyup="filterMyIssues()">
+                <select id="myFilterStatus" onchange="filterMyIssues()">
+                    <option value="">All Status</option>
+                    <option value="submitted">Submitted</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="resolved">Resolved</option>
+                    <option value="closed">Closed</option>
+                </select>
+            </div>
+            <div id="myIssuesContainer" class="issues-list"></div>
+        </div>
+
+        <!-- Status Tracker Tab -->
+        <div id="statusTab" class="tab-content">
+            <div class="status-tracker">
+                <h2>Issue Status Tracker</h2>
+                <div id="statusTrackerContainer" class="status-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Issue Detail Modal -->
+    <div id="issueModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Issue Details</h2>
+            
+            <div class="modal-body">
+                <div class="issue-detail-group">
+                    <label>Issue ID:</label>
+                    <p id="modalIssueId"></p>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>Title:</label>
+                    <p id="modalIssueTitle"></p>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>Description:</label>
+                    <p id="modalIssueDesc"></p>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>Location:</label>
+                    <p id="modalIssueLocation"></p>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>Status:</label>
+                    <div class="status-badge" id="modalIssueStatus"></div>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>Priority:</label>
+                    <div class="priority-badge" id="modalIssuePriority"></div>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>Assigned Officer:</label>
+                    <p id="modalAssignedOfficer">Not assigned yet</p>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>Created:</label>
+                    <p id="modalCreatedDate"></p>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>officer Comments:</label>
+                    <div id="commentsList" class="comments-list"></div>
+                </div>
+
+                <div class="issue-detail-group">
+                    <label>Add Your Comment:</label>
+                    <textarea id="modalComment" placeholder="Add your comment..." style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd;"></textarea>
+                    <button onclick="addComment()" class="btn btn-primary" style="margin-top: 10px;">Post Comment</button>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert -->
+    <div id="successAlert" class="alert alert-success hidden">
+        <span id="alertMessage"></span>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notificationToast" class="notification-toast hidden"></div>
+
+    <script src="citizen-script.js"></script>
+</body>
+
+</html>

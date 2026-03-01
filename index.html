@@ -1,0 +1,103 @@
+<!DOCTYPE html>http://localhost:3000/officer.html    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAI AutoResQ - Smart Crash Communication System</title>
+    <link rel="stylesheet" href="landing.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">🚗</span>
+                <span class="logo-text">GenAI AutoResQ</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#about" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <!-- Animated Wave Background -->
+        <div class="wave-container">
+            <!-- Top Left Wave (Golden Yellow) -->
+            <svg class="wave wave-top" viewBox="0 0 400 300" preserveAspectRatio="none">
+                <path d="M0,0 Q100,40 200,20 T400,0 L400,100 Q300,80 200,100 T0,80 Z" fill="#F5A623" opacity="0.9"></path>
+                <path d="M0,60 Q100,100 200,80 T400,100 L400,150 Q300,130 200,150 T0,140 Z" fill="#E6921C" opacity="0.6"></path>
+            </svg>
+            
+            <!-- Top Right Wave (Purple - subtle) -->
+            <svg class="wave wave-middle" viewBox="0 0 400 200" preserveAspectRatio="none" style="top: 0; right: 0; left: auto; width: 45%; opacity: 0.3;">
+                <path d="M400,0 Q300,30 200,20 T0,0 L0,60 Q100,40 200,50 T400,40 Z" fill="#3B0A57"></path>
+            </svg>
+        </div>
+
+        <!-- Bottom Wave (Purple & Gold) -->
+        <svg class="wave wave-bottom" viewBox="0 0 400 200" preserveAspectRatio="none">
+            <path d="M0,200 L400,100 Q300,120 200,110 T0,130 Z" fill="#3B0A57" opacity="0.95"></path>
+            <path d="M200,200 L400,120 Q350,140 300,150 T200,180 Z" fill="#F5A623" opacity="0.85"></path>
+        </svg>
+
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">GenAI AutoResQ</h1>
+                <p class="hero-subtitle">Next-Gen Smart Crash Communication and Emergency Response System</p>
+                <p class="hero-description">Real-time crash detection, automatic emergency alerts, and AI-powered response coordination for safer roads.</p>
+                
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="navigateTo('officer.html')">Get Started</button>
+                    <button class="btn btn-secondary" onclick="navigateTo('citizen.html')">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="features-container">
+            <h2>Key Features</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚨</div>
+                    <h3>Real-Time Detection</h3>
+                    <p>Instant crash detection using AI sensors and automatic emergency alerts</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Smart Communication</h3>
+                    <p>Seamless communication between officers and emergency responders</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🗺️</div>
+                    <h3>Location Tracking</h3>
+                    <p>Precise GPS location sharing for faster emergency dispatch</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Analytics Dashboard</h3>
+                    <p>Comprehensive analytics and reporting for emergency management</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <h2>About AutoResQ</h2>
+            <p>GenAI AutoResQ is revolutionizing emergency response through intelligent crash detection, real-time communication, and AI-powered coordination. Our system connects citizens, officers, and emergency responders to save lives and reduce response times.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 GenAI AutoResQ. All rights reserved.</p>
+    </footer>
+
+    <script src="landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "smart-city",
+  "version": "1.0.0",
+  "description": "Smart city web application with multi-device support",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^4.22.1",
+    "socket.io": "^4.8.3"
+  }
+}
