@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2C3E50,100:3498DB&height=210&section=header&text=Smart%20City%20Complaint%20System&fontSize=42&fontColor=FFFFFF&animation=fadeIn&fontAlignY=38&desc=Real-Time%20Civic%20Issue%20Reporting%20%26%20Tracking&descAlignY=58&descSize=17&descColor=ECF0F1" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2C3E50,100:3498DB&height=210&section=header&text=Smart%20City%20Complaint%20System&fontSize=42&fontColor=FFFFFF&animation=fadeIn&fontAlignY=38&desc=Real-Time%20Civic%20Issue%20Reporting%20and%20Tracking&descAlignY=58&descSize=17&descColor=ECF0F1" width="100%"/>
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=3000&pause=800&color=3498DB&center=true&vCenter=true&width=650&lines=Citizens+Report.+Officers+Resolve.+In+Real+Time.;Built+with+Node.js%2C+Express+%26+Socket.IO;Track+Every+Complaint%2C+From+Pothole+to+Resolution" alt="Typing SVG" />
 
